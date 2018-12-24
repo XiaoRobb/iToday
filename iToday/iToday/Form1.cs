@@ -13,11 +13,13 @@ namespace iToday
     public partial class Form1 : Form
     {
         private DateTime today = DateTime.Now;
-        private Wether wether = new Wether("雨", "xxxx");
         private Point mPoint;
-        private List<ThingPanel> hotThingPanels;
-        private List<ThingPanel> historyThingPanels;
+        private List<TodayThingPanel> hotThingPanels;
+        private List<TodayThingPanel> historyThingPanels;
+        private TodayDatePanel todayDatePanel;
+        private TodayWetherPanel todayWetherPanel;
         private bool showInfor = true;
+        private bool showChiLun = true;
         public Form1()
         {
             InitializeComponent();
@@ -28,7 +30,20 @@ namespace iToday
             pictureBox7.Hide();
             pictureBox8.Hide();
             flowLayoutPanel1.Hide();
+
+            pictureBox1.Hide();
+            pictureBox2.Hide();
+            pictureBox4.Hide();
+            dateLabel.Hide();
+
+
             this.dateLabel.Text = today.Day.ToString();
+
+            TodayWetherCrawler todayWetherCrawler = new TodayWetherCrawler();
+            todayWetherCrawler.Crawl();
+            todayWetherPanel = new TodayWetherPanel(todayWetherCrawler.wether);
+            if(!string.IsNullOrEmpty(todayWetherCrawler.wether.ImageUrl))
+                pictureBox2.Image = Image.FromFile(todayWetherCrawler.wether.ImageUrl);
         }
 
         protected override CreateParams CreateParams
@@ -91,15 +106,15 @@ namespace iToday
             flowLayoutPanel1.Controls.Clear();
             if (hotThingPanels == null)
             {
-                hotThingPanels = new List<ThingPanel>();
+                hotThingPanels = new List<TodayThingPanel>();
                 TodayHotCrawler todayCrawler = new TodayHotCrawler();
                 todayCrawler.Crawl();
                 foreach (TodayHotPoint todayHotPoint in todayCrawler.list)
                 {
-                    hotThingPanels.Add(new ThingPanel(todayHotPoint));
+                    hotThingPanels.Add(new TodayThingPanel(todayHotPoint));
                 }
             }
-            foreach (ThingPanel thingPanel in hotThingPanels)
+            foreach (TodayThingPanel thingPanel in hotThingPanels)
             {
                 flowLayoutPanel1.Controls.Add(thingPanel);
             }
@@ -111,18 +126,102 @@ namespace iToday
             flowLayoutPanel1.Controls.Clear();
             if (historyThingPanels == null)
             {
-                historyThingPanels = new List<ThingPanel>();
+                historyThingPanels = new List<TodayThingPanel>();
                 TodayHistoryCrawler todayHistoryCrawler = new TodayHistoryCrawler();
                 todayHistoryCrawler.Crawl();
                 foreach (TodayHistory todayHistory in todayHistoryCrawler.list)
                 {
-                    historyThingPanels.Add(new ThingPanel(todayHistory));
+                    historyThingPanels.Add(new TodayThingPanel(todayHistory));
                 }
             }
-            foreach (ThingPanel thingPanel in historyThingPanels)
+            foreach (TodayThingPanel thingPanel in historyThingPanels)
             {
                 this.flowLayoutPanel1.Controls.Add(thingPanel);
             }
+            flowLayoutPanel1.Show();
+        }
+
+        private void pictureBox8_MouseClick(object sender, MouseEventArgs e)
+        {
+            flowLayoutPanel1.Controls.Clear();
+            if (todayDatePanel == null)
+            {
+                
+                TodayDateCrawler todayDateCrawler = new TodayDateCrawler();
+                todayDateCrawler.Crawl();
+                todayDatePanel = new TodayDatePanel(todayDateCrawler.todayDate);
+                
+            }
+            flowLayoutPanel1.Controls.Add(todayDatePanel);
+            flowLayoutPanel1.Show();
+        }
+
+        private void pictureBox3_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (e.Location.Y > 218 && showInfor)
+            {
+                pictureBox5.Show();
+                pictureBox6.Show();
+                pictureBox7.Show();
+                pictureBox8.Show();
+                showInfor = false;
+            }
+            else if (e.Location.Y > 218 && !showInfor)
+            {
+                pictureBox5.Hide();
+                pictureBox6.Hide();
+                pictureBox7.Hide();
+                pictureBox8.Hide();
+                flowLayoutPanel1.Hide();
+                showInfor = true;
+            }
+        }
+
+        private void pictureBox3_DoubleClick(object sender, EventArgs e)
+        {
+            if (showChiLun)
+            {
+                pictureBox1.Show();
+                pictureBox2.Show();
+                pictureBox2.BringToFront();
+                pictureBox4.Show();
+                pictureBox4.BringToFront();
+                dateLabel.Show();
+                dateLabel.BringToFront();
+                showChiLun = false;
+            }
+            else
+            {
+                pictureBox5.Hide();
+                pictureBox6.Hide();
+                pictureBox7.Hide();
+                pictureBox8.Hide();
+                flowLayoutPanel1.Hide();
+                pictureBox1.Hide();
+                pictureBox2.Hide();
+                pictureBox4.Hide();
+                dateLabel.Hide();
+                showChiLun = true;
+            }
+        }
+
+        private void pictureBox3_MouseDown(object sender, MouseEventArgs e)
+        {
+            mPoint = new Point(e.X, e.Y);
+        }
+
+        private void pictureBox3_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                this.Location = new Point(this.Location.X + e.X - mPoint.X, this.Location.Y + e.Y - mPoint.Y);
+            }
+        }
+
+        private void pictureBox2_MouseClick(object sender, MouseEventArgs e)
+        {
+            flowLayoutPanel1.Controls.Clear();           
+            flowLayoutPanel1.Controls.Add(todayWetherPanel);
             flowLayoutPanel1.Show();
         }
     }

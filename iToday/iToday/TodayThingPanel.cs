@@ -9,12 +9,12 @@ using Microsoft.Win32;
 
 namespace iToday
 {
-    class ThingPanel : FlowLayoutPanel
+    class TodayThingPanel : FlowLayoutPanel
     {
         private PictureBox pictureBox;
         private Label label = new Label();
         private string url;
-        public ThingPanel(TodayHotPoint todayHotPoint) : base()
+        public TodayThingPanel(TodayHotPoint todayHotPoint) : base()
         {
             Init();
             pictureBox.ImageLocation = todayHotPoint.ImageUrl;
@@ -22,7 +22,7 @@ namespace iToday
             url = todayHotPoint.Url;
         }
 
-        public ThingPanel(TodayHistory todayHistory) : base()
+        public TodayThingPanel(TodayHistory todayHistory) : base()
         {
             Init();
             pictureBox.ImageLocation = todayHistory.ImageUrl;

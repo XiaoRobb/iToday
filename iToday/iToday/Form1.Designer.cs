@@ -81,6 +81,7 @@
             this.pictureBox2.Size = new System.Drawing.Size(40, 40);
             this.pictureBox2.TabIndex = 2;
             this.pictureBox2.TabStop = false;
+            this.pictureBox2.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox2_MouseClick);
             // 
             // pictureBox3
             // 
@@ -90,6 +91,10 @@
             this.pictureBox3.Size = new System.Drawing.Size(550, 426);
             this.pictureBox3.TabIndex = 3;
             this.pictureBox3.TabStop = false;
+            this.pictureBox3.DoubleClick += new System.EventHandler(this.pictureBox3_DoubleClick);
+            this.pictureBox3.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox3_MouseClick);
+            this.pictureBox3.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox3_MouseDown);
+            this.pictureBox3.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox3_MouseMove);
             // 
             // pictureBox4
             // 
@@ -139,6 +144,7 @@
             this.pictureBox8.Size = new System.Drawing.Size(40, 40);
             this.pictureBox8.TabIndex = 8;
             this.pictureBox8.TabStop = false;
+            this.pictureBox8.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox8_MouseClick);
             // 
             // flowLayoutPanel1
             // 

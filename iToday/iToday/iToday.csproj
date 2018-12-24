@@ -56,14 +56,23 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringHelper.cs" />
-    <Compile Include="ThingPanel.cs">
+    <Compile Include="TodayThingPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="TodayDate.cs" />
+    <Compile Include="TodayDateCrawler.cs" />
+    <Compile Include="TodayDatePanel.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="TodayHistory.cs" />
     <Compile Include="TodayHistoryCrawler.cs" />
     <Compile Include="TodayHotCrawler.cs" />
     <Compile Include="TodayHotPoint.cs" />
-    <Compile Include="Wether.cs" />
+    <Compile Include="TodayWether.cs" />
+    <Compile Include="TodayWetherCrawler.cs" />
+    <Compile Include="TodayWetherPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

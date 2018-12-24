@@ -18,6 +18,7 @@ namespace iToday
         private List<TodayThingPanel> historyThingPanels;
         private TodayDatePanel todayDatePanel;
         private TodayWetherPanel todayWetherPanel;
+        private List<TodayClassPanel> todayClassPanels;
         private bool showInfor = true;
         private bool showChiLun = true;
         public Form1()
@@ -223,6 +224,28 @@ namespace iToday
             flowLayoutPanel1.Controls.Clear();           
             flowLayoutPanel1.Controls.Add(todayWetherPanel);
             flowLayoutPanel1.Show();
+        }
+
+        private void pictureBox5_MouseClick(object sender, MouseEventArgs e)
+        {
+            flowLayoutPanel1.Controls.Clear();
+            if(todayClassPanels == null)
+            {
+                todayClassPanels = new List<TodayClassPanel>();
+                TodayClassCrawler todayClassCrawler = new TodayClassCrawler();
+                Login login = new Login(todayClassCrawler);
+                login.ShowDialog();
+                foreach (TodayClass todayClass in todayClassCrawler.list)
+                {
+                    todayClassPanels.Add(new TodayClassPanel(todayClass));
+                }
+            }
+            foreach (TodayClassPanel todayClassPanel in todayClassPanels)
+            {
+                flowLayoutPanel1.Controls.Add(todayClassPanel);
+            }
+            flowLayoutPanel1.Show();
+
         }
     }
 }

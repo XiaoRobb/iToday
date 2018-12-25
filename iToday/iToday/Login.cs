@@ -13,23 +13,38 @@ namespace iToday
 {
     public partial class Login : Form
     {
-        private TodayClassCrawler todayClassCrawler; 
-
+        private TodayClassCrawler todayClassCrawler;
+        private Point mPoint;
         public Login(TodayClassCrawler todayClassCrawler)
         {
             InitializeComponent();
             this.todayClassCrawler = todayClassCrawler;
-            pictureBox1.Image = todayClassCrawler.getCodeStream();
+            GetPic();
+            this.BackColor = Color.Gray;
+            TransparencyKey = Color.Gray;
+            if(DateTime.Now.Hour >=19|| DateTime.Now.Hour<6)
+            {
+                this.BackgroundImage = Image.FromFile("../../Resource/login_night.png");
+            }
+            
         }
-
-        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+       
+        private void GetPic()
         {
             pictureBox1.Image = todayClassCrawler.getCodeStream();
+            if (pictureBox1.Image == null)
+            {
+                pictureBox1.Image = Image.FromFile("../../Resource/net.png");
+            }
+        }
+        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            GetPic();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            pictureBox1.Image = todayClassCrawler.getCodeStream();
+            Dispose();
         }
         public static string MD5(string encryptString)
         {
@@ -70,9 +85,22 @@ namespace iToday
             }
             else 
             {
-                MessageBox.Show("登录失败！");
-                pictureBox1.Image = todayClassCrawler.getCodeStream();
+                MessageBox.Show("网络开小差了=_=！");
+                GetPic();
             }
+        }
+
+        private void Login_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                this.Location = new Point(this.Location.X + e.X - mPoint.X, this.Location.Y + e.Y - mPoint.Y);
+            }
+        }
+
+        private void Login_MouseDown(object sender, MouseEventArgs e)
+        {
+            mPoint = new Point(e.X, e.Y);
         }
     }
 }

@@ -15,10 +15,12 @@ namespace iToday
         private Label label_wind = new Label();
         public TodayWetherPanel(TodayWether wether) : base()
         {
-            label_wether.Text = wether.Wether;
-
-            label_temper.Text = wether.Temperature;
-            label_wind.Text = wether.Wind;
+            if(wether!=null)
+            {
+                label_wether.Text = wether.Wether;
+                label_temper.Text = wether.Temperature;
+                label_wind.Text = wether.Wind;
+            }       
             Init();
         }
         public void Init()

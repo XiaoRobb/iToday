@@ -18,7 +18,7 @@ namespace iToday
         private List<TodayThingPanel> historyThingPanels;
         private TodayDatePanel todayDatePanel;
         private TodayWetherPanel todayWetherPanel;
-        private List<TodayClassPanel> todayClassPanels;
+        private List<TodayClassPanel> todayClassPanels=new List<TodayClassPanel>();
         private bool showInfor = true;
         private bool showChiLun = true;
         public Form1()
@@ -43,19 +43,19 @@ namespace iToday
             TodayWetherCrawler todayWetherCrawler = new TodayWetherCrawler();
             todayWetherCrawler.Crawl();
             todayWetherPanel = new TodayWetherPanel(todayWetherCrawler.wether);
-            if(!string.IsNullOrEmpty(todayWetherCrawler.wether.ImageUrl))
+            if(todayWetherCrawler.wether!=null&&!string.IsNullOrEmpty(todayWetherCrawler.wether.ImageUrl))
                 pictureBox2.Image = Image.FromFile(todayWetherCrawler.wether.ImageUrl);
         }
 
-        protected override CreateParams CreateParams
-        {
-            get
-            {
-                CreateParams cp = base.CreateParams;
-                cp.ExStyle |= 0x00080000;  //  WS_EX_LAYERED 扩展样式
-                return cp;
-            }
-        }
+        //protected override CreateParams CreateParams
+        //{
+        //    get
+        //    {
+        //        CreateParams cp = base.CreateParams;
+        //        cp.ExStyle |= 0x00080000;  //  WS_EX_LAYERED 扩展样式
+        //        return cp;
+        //    }
+        //}
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -66,7 +66,6 @@ namespace iToday
         {
             if (e.Button == MouseButtons.Left)
             {
-
                 this.Location = new Point(this.Location.X + e.X - mPoint.X, this.Location.Y + e.Y - mPoint.Y);
             }
         }
@@ -229,9 +228,8 @@ namespace iToday
         private void pictureBox5_MouseClick(object sender, MouseEventArgs e)
         {
             flowLayoutPanel1.Controls.Clear();
-            if(todayClassPanels == null)
+            if(todayClassPanels.Count==0)
             {
-                todayClassPanels = new List<TodayClassPanel>();
                 TodayClassCrawler todayClassCrawler = new TodayClassCrawler();
                 Login login = new Login(todayClassCrawler);
                 login.ShowDialog();

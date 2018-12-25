@@ -34,6 +34,7 @@ namespace iToday
         {
             this.Width = 180;
             this.Height = 40;
+            //this.BackgroundImage = Image.FromFile("../../Resource/yun.png");
             pictureBox = new PictureBox();
             pictureBox.Size = new Size(40, 40);
             pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;

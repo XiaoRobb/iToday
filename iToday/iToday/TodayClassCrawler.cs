@@ -23,17 +23,25 @@ namespace iToday
         public CookieContainer cookies = new CookieContainer(); //存储验证码cookie
         public Image getCodeStream()
         {
-            //验证码请求
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://210.42.121.241/servlet/GenImg");
-            request.Method = "GET";
-            request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36";
-            request.Accept = "image/webp,image/apng,image/*,*/*;q=0.8";
-            request.CookieContainer = cookies;//暂存到新实列
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-            Stream stream = response.GetResponseStream();
-            Image img = Image.FromStream(stream);
-            response.Close();
-            return img;
+            try
+            {
+                //验证码请求
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("http://210.42.121.241/servlet/GenImg");
+                request.Method = "GET";
+                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36";
+                request.Accept = "image/webp,image/apng,image/*,*/*;q=0.8";
+                request.CookieContainer = cookies;//暂存到新实列
+                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+                Stream stream = response.GetResponseStream();
+                Image img = Image.FromStream(stream);
+                response.Close();
+                return img;
+            }
+            catch
+            {
+                return null;
+            }
+            
         }
         public bool GetHtml(string id, string pwd, string xdvfb)                     //开始爬取
         {

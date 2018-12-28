@@ -26,7 +26,7 @@ namespace iToday
             {
                 this.BackgroundImage = Image.FromFile("../../Resource/login_night.png");
             }
-            
+            comboBox1.DataSource = Glo.students;
         }
        
         private void GetPic()
@@ -64,13 +64,25 @@ namespace iToday
         private void button1_Click(object sender, EventArgs e)
         {
             string pwd = MD5(textBox2.Text);
-            todayClassCrawler.GetHtml(textBox1.Text, pwd, textBox3.Text);
+            todayClassCrawler.GetHtml(comboBox1.Text, pwd, textBox3.Text);
             int flag = todayClassCrawler.Sucesse();
             if (flag==3)
             {
                 todayClassCrawler.GetHtml2();
                 todayClassCrawler.GetTodayClass();
-                todayClassCrawler.CheckClass();
+                Glo.user = Glo.FindStudent(comboBox1.Text, textBox2.Text);
+                if (Glo.user==null&& Glo.user == null)
+                {
+                    Glo.user = new Student(comboBox1.Text, textBox2.Text, true);
+                    Glo.user.Classes = todayClassCrawler.list;
+                    Glo.AddStudnet(Glo.user);
+                }
+                else
+                {
+                    Glo.user.IsUser = true;
+                    Glo.UpdateStudnet(Glo.user);
+                }
+                Form1.form1.ReloadUserPic();
                 Dispose();
             }
             else if(flag == 0)
@@ -101,6 +113,12 @@ namespace iToday
         private void Login_MouseDown(object sender, MouseEventArgs e)
         {
             mPoint = new Point(e.X, e.Y);
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Student student = (Student)comboBox1.SelectedItem;
+            textBox2.Text = student.Pwd;
         }
     }
 }

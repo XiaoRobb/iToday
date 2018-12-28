@@ -16,6 +16,7 @@ namespace iToday
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            Glo.GloInit();
             Application.Run(new Form1());
         }
     }

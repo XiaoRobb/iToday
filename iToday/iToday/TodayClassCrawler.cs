@@ -17,7 +17,7 @@ namespace iToday
     {
         public string html;
         public string html2;
-        public List<TodayClass> list = new List<TodayClass>();
+        public List<MyClass> list = new List<MyClass>();
         private readonly string url = "http://210.42.121.241/servlet/Login";                //爬取的网站
 
         public CookieContainer cookies = new CookieContainer(); //存储验证码cookie
@@ -117,62 +117,28 @@ namespace iToday
 
         public void GetTodayClass()                     //开始爬取
         {
-            int w = 0;
-            DayOfWeek week = DateTime.Now.DayOfWeek;
-            switch (week)
-            {
-                case DayOfWeek.Monday:
-                    w = 1;
-                    break;
-                case DayOfWeek.Tuesday:
-                    w = 2;
-                    break;
-                case DayOfWeek.Wednesday:
-                    w = 3;
-                    break;
-                case DayOfWeek.Thursday:
-                    w = 4;
-                    break;
-                case DayOfWeek.Friday:
-                    w = 5;
-                    break;
-                case DayOfWeek.Saturday:
-                    w = 6;
-                    break;
-                case DayOfWeek.Sunday:
-                    w = 7;
-                    break;
-            }
+            
             if (!string.IsNullOrEmpty(html2))
             {
-                //string reg = @"var lessonName =[\s\S]*?day = """ + w + @"[\s\S]*?任课老师";
-                string reg = @"var lessonName =[\s\S]*?任课老师";
-                // 定义正则表达式用来匹配 img 标签   
+                string reg = @"var LessonName =[\s\S]*?任课老师"; 
                 Regex regImg = new Regex(reg, RegexOptions.IgnoreCase);
                 // 搜索匹配的字符串   
-                MatchCollection matches = regImg.Matches(html2);
-                List<string> sUrlList = new List<string>();
+                MatchCollection matches = regImg.Matches(html2);;
 
                 // 取得匹配项列表   
                 foreach (Match match in matches)
-                    sUrlList.Add(match.ToString());
-                foreach (string str in sUrlList)
                 {
-                    reg = @"day = """ + w;
-                    regImg = new Regex(reg, RegexOptions.IgnoreCase);
-                    Match match = regImg.Match(str);
-                    if (match.Success)
-                    {
-                        list.Add(CreatClass(str));
-                    }
-                }
+                    string str = match.ToString();
+                    list.Add(CreatClass(str));
+                }             
             }
 
         }
 
-        public TodayClass CreatClass(string str)
+        public MyClass CreatClass(string str)
         {
             string lessonName;                       //课程名
+            string day;                              //上课时间
             string teacherName;                      //老师姓名
             string beginTime;                        //开始时间
             string endTime;                          //结束时间
@@ -181,50 +147,58 @@ namespace iToday
             string endWeek;                          //结束周
             string temp;
 
-            string reg = @"lessonName[\s\S]*?"";";
+            string reg = @"LessonName[\s\S]*?"";";
             Regex r = new Regex(reg, RegexOptions.IgnoreCase);
             Match match = r.Match(str);
             temp = match.ToString();
             lessonName = temp.Substring(14, temp.Length - 14 - 2);
 
-            reg = @"beginWeek[\s\S]*?"";";
+
+            reg = @"day[\s\S]*?"";";
+            r = new Regex(reg, RegexOptions.IgnoreCase);
+            match = r.Match(str);
+            temp = match.ToString();
+            day = temp.Substring(7, temp.Length - 7 - 2);
+
+
+            reg = @"BeginWeek[\s\S]*?"";";
             r = new Regex(reg, RegexOptions.IgnoreCase);
             match = r.Match(str);
             temp = match.ToString();
             beginTime = temp.Substring(13, temp.Length - 13 - 2);
 
-            reg = @"endWeek[\s\S]*?"";";
+            reg = @"EndWeek[\s\S]*?"";";
             r = new Regex(reg, RegexOptions.IgnoreCase);
             match = r.Match(str);
             temp = match.ToString();
             endTime = temp.Substring(11, temp.Length - 11 - 2);
 
-            reg = @"teacherName[\s\S]*?"";";
+            reg = @"TeacherName[\s\S]*?"";";
             r = new Regex(reg, RegexOptions.IgnoreCase);
             match = r.Match(str);
             temp = match.ToString();
             teacherName = temp.Substring(15, temp.Length - 15 - 2);
 
-            reg = @"detail[\s\S]*?"";";
+            reg = @"Detail[\s\S]*?"";";
             r = new Regex(reg, RegexOptions.IgnoreCase);
             match = r.Match(str);
             temp = match.ToString();
             detail = temp.Substring(8, temp.Length - 8 - 2);
 
-            reg = @"beginWeek[\s\S]*?"";";
+            reg = @"BeginWeek[\s\S]*?"";";
             r = new Regex(reg, RegexOptions.IgnoreCase);
             match = r.Match(str);
             temp = match.ToString();
             beginWeek = temp.Substring(13, temp.Length - 13 - 2);
 
 
-            reg = @"endWeek[\s\S]*?"";";
+            reg = @"EndWeek[\s\S]*?"";";
             r = new Regex(reg, RegexOptions.IgnoreCase);
             match = r.Match(str);
             temp = match.ToString();
             endWeek = temp.Substring(11, temp.Length - 11 - 2);
-
-            return new TodayClass(lessonName, teacherName, beginTime, endTime, detail, beginTime, endWeek);
+            MyClass my = new MyClass(lessonName, day, teacherName, beginTime, endTime, detail, beginWeek, endWeek);
+            return my;
         }
 
         public void getTodayWeek()
@@ -237,7 +211,7 @@ namespace iToday
             r = new Regex(reg, RegexOptions.IgnoreCase);
             match = r.Match(temp);
             temp = match.ToString();
-            TodayClass.nowWeek = temp;
+            MyClass.nowWeek = temp;
         }
         public int Sucesse()
         {
@@ -269,7 +243,7 @@ namespace iToday
             getTodayWeek();
             for (int i = 0; i < list.Count; i++)
             {
-                if (string.Compare(TodayClass.nowWeek, list.ElementAt(i).endTime) == 1 || string.Compare(TodayClass.nowWeek, list.ElementAt(i).beginTime) == -1)
+                if (string.Compare(MyClass.nowWeek, list.ElementAt(i).EndTime) == 1 || string.Compare(MyClass.nowWeek, list.ElementAt(i).BeginTime) == -1)
                 {
                     list.RemoveAt(i);
                     i--;

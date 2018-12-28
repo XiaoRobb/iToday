@@ -14,12 +14,12 @@ namespace iToday
         private Label label_name = new Label();
         private Label label_teacher = new Label();
         private Label label_infor = new Label();
-        public TodayClassPanel(TodayClass todayClass) : base()
+        public TodayClassPanel(MyClass todayClass) : base()
         {
             Init();
-            label_name.Text = todayClass.lessonName;
-            label_teacher.Text = todayClass.teacherName;
-            label_infor.Text = todayClass.detail;
+            label_name.Text = todayClass.LessonName;
+            label_teacher.Text = todayClass.TeacherName;
+            label_infor.Text = todayClass.Detail;
         }
        
 

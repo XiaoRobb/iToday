@@ -21,23 +21,24 @@ namespace iToday
         private List<TodayClassPanel> todayClassPanels=new List<TodayClassPanel>();
         private bool showInfor = true;
         private bool showChiLun = true;
+
+        public static Form1 form1;
         public Form1()
         {
             InitializeComponent();
             BackColor = Color.YellowGreen;
             TransparencyKey = Color.YellowGreen;
-            pictureBox5.Hide();
-            pictureBox6.Hide();
-            pictureBox7.Hide();
-            pictureBox8.Hide();
+            form1 = this;
             flowLayoutPanel1.Hide();
+            panel1.Hide();
 
             pictureBox1.Hide();
             pictureBox2.Hide();
             pictureBox4.Hide();
             dateLabel.Hide();
 
-
+            ReloadUserPic();
+            
             this.dateLabel.Text = today.Day.ToString();
 
             TodayWetherCrawler todayWetherCrawler = new TodayWetherCrawler();
@@ -46,17 +47,21 @@ namespace iToday
             if(todayWetherCrawler.wether!=null&&!string.IsNullOrEmpty(todayWetherCrawler.wether.ImageUrl))
                 pictureBox2.Image = Image.FromFile(todayWetherCrawler.wether.ImageUrl);
         }
-
-        //protected override CreateParams CreateParams
-        //{
-        //    get
-        //    {
-        //        CreateParams cp = base.CreateParams;
-        //        cp.ExStyle |= 0x00080000;  //  WS_EX_LAYERED 扩展样式
-        //        return cp;
-        //    }
-        //}
-
+        public void ReloadUserPic()
+        {
+            if (Glo.user != null)
+            {
+                pictureBox9.ImageLocation = "../../Resource/user_yes.png";
+                pictureBox10.Show();
+                label1.Text = Glo.user.Id;
+            }
+            else
+            {
+                pictureBox9.ImageLocation = "../../Resource/user_no.png";
+                pictureBox10.Hide();
+            }
+        }
+  
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             mPoint = new Point(e.X, e.Y);
@@ -81,19 +86,13 @@ namespace iToday
         {
             if (showInfor)
             {
-                pictureBox5.Show();
-                pictureBox6.Show();
-                pictureBox7.Show();
-                pictureBox8.Show();
+                panel1.Show();
                 showInfor = false;
                 pictureBox4.ImageLocation = "../../Resource//remove.png";
             }
             else
             {
-                pictureBox5.Hide();
-                pictureBox6.Hide();
-                pictureBox7.Hide();
-                pictureBox8.Hide();
+                panel1.Hide();
                 flowLayoutPanel1.Hide();
                 showInfor = true;
                 pictureBox4.ImageLocation = "../../Resource//add.png";
@@ -160,18 +159,12 @@ namespace iToday
         {
             if (e.Location.Y > 218 && showInfor)
             {
-                pictureBox5.Show();
-                pictureBox6.Show();
-                pictureBox7.Show();
-                pictureBox8.Show();
+                panel1.Show();
                 showInfor = false;
             }
             else if (e.Location.Y > 218 && !showInfor)
             {
-                pictureBox5.Hide();
-                pictureBox6.Hide();
-                pictureBox7.Hide();
-                pictureBox8.Hide();
+                panel1.Hide();
                 flowLayoutPanel1.Hide();
                 showInfor = true;
             }
@@ -192,10 +185,7 @@ namespace iToday
             }
             else
             {
-                pictureBox5.Hide();
-                pictureBox6.Hide();
-                pictureBox7.Hide();
-                pictureBox8.Hide();
+                panel1.Hide();
                 flowLayoutPanel1.Hide();
                 pictureBox1.Hide();
                 pictureBox2.Hide();
@@ -228,12 +218,10 @@ namespace iToday
         private void pictureBox5_MouseClick(object sender, MouseEventArgs e)
         {
             flowLayoutPanel1.Controls.Clear();
-            if(todayClassPanels.Count==0)
+            if (todayClassPanels.Count == 0 && Glo.user != null)
             {
-                TodayClassCrawler todayClassCrawler = new TodayClassCrawler();
-                Login login = new Login(todayClassCrawler);
-                login.ShowDialog();
-                foreach (TodayClass todayClass in todayClassCrawler.list)
+                Glo.user.GetTodayClasses();
+                foreach (MyClass todayClass in Glo.user.todayClasses)
                 {
                     todayClassPanels.Add(new TodayClassPanel(todayClass));
                 }
@@ -243,7 +231,41 @@ namespace iToday
                 flowLayoutPanel1.Controls.Add(todayClassPanel);
             }
             flowLayoutPanel1.Show();
+        }
 
+        private void pictureBox9_MouseClick(object sender, MouseEventArgs e)
+        {
+            try
+            {
+                if (Glo.user == null)
+                {
+                    TodayClassCrawler todayClassCrawler = new TodayClassCrawler();
+                    Login login = new Login(todayClassCrawler);
+                    login.ShowDialog();
+                    foreach (MyClass todayClass in todayClassCrawler.list)
+                    {
+                        todayClassPanels.Add(new TodayClassPanel(todayClass));
+                    }
+                }
+            }
+            catch(Exception e2)
+            {
+                string s = e2.Message;
+            }
+            
+        }
+
+        private void pictureBox10_MouseClick(object sender, MouseEventArgs e)
+        {
+            DialogResult dr = MessageBox.Show(this, "确定退出？", "退出登录", MessageBoxButtons.OKCancel);
+            if(dr== DialogResult.OK)
+            {
+                Glo.user.IsUser = false;
+                Glo.UpdateStudnet(Glo.user);
+                ReloadUserPic();
+                Glo.user = null;
+                Form1.form1.ReloadUserPic();
+            }
         }
     }
 }

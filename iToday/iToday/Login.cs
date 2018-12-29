@@ -73,8 +73,7 @@ namespace iToday
                 Glo.user = Glo.FindStudent(comboBox1.Text, textBox2.Text);
                 if (Glo.user==null&& Glo.user == null)
                 {
-                    Glo.user = new Student(comboBox1.Text, textBox2.Text, true);
-                    Glo.user.Classes = todayClassCrawler.list;
+                    Glo.user = new Student(comboBox1.Text, textBox2.Text, true, todayClassCrawler.list);
                     Glo.AddStudnet(Glo.user);
                 }
                 else
@@ -82,6 +81,9 @@ namespace iToday
                     Glo.user.IsUser = true;
                     Glo.UpdateStudnet(Glo.user);
                 }
+                Glo.GetAllStudents();
+                comboBox1.DataSource = new List<Student>();
+                comboBox1.DataSource = Glo.students;
                 Form1.form1.ReloadUserPic();
                 Dispose();
             }

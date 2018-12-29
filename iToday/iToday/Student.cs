@@ -20,17 +20,14 @@ namespace iToday
         public List<MyClass> todayClasses = new List<MyClass>();
         public Student()
         {
-            Id = "";
-            Pwd = "";
-            IsUser = true;
             Classes = new List<MyClass>();
         }
-        public Student(string id,string pwd,bool isUser)
+        public Student(string id,string pwd,bool isUser,List<MyClass> myClasses)
         {
             Id = id;
             Pwd = pwd;
             IsUser = isUser;
-            Classes = new List<MyClass>();
+            Classes = myClasses;
         }
 
         public void GetTodayClasses()

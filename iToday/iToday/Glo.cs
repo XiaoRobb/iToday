@@ -39,7 +39,6 @@ namespace iToday
             }
             catch(Exception e)
             {
-                string s = e.Message;
                 return false;
             }
         }

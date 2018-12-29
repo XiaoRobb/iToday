@@ -11,7 +11,11 @@ namespace iToday
 
     public class MyClass
     {
+        public static DateTime startDay = Convert.ToDateTime("2018-9-2 0:00:00");//开学日期
+        public static string nowWeek = ((DateTime.Now - startDay).Days / 7 + 1).ToString();//当前周
+
         [Key]
+        public string Id { set; get; }
         public string LessonName { set; get; }                       //课程名
         public string Day { set; get; }                              //课程名
         public string TeacherName { set; get; }                      //老师姓名
@@ -21,9 +25,8 @@ namespace iToday
         public string EndWeek { set; get; }                          //结束周
         public string Detail { set; get; }                           //信息
 
-        public static DateTime startDay = Convert.ToDateTime("2018-9-2 0:00:00");//开学日期
 
-        public static string nowWeek =((DateTime.Now - startDay).Days/7+1).ToString();//当前周
+        
         public MyClass(string lessonName, string day,string teacherName, string beginTime, string endTime, string detail, string beginWeek, string endWeek)
         {
             this.LessonName = lessonName;
@@ -34,10 +37,11 @@ namespace iToday
             this.Detail = detail;
             this.BeginWeek = beginWeek;
             this.EndWeek = endWeek;
+            Id = Guid.NewGuid().ToString();
         }
         public MyClass()
         {
-
+            Id = Guid.NewGuid().ToString();
         }
     }
 }

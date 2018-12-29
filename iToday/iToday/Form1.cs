@@ -37,8 +37,10 @@ namespace iToday
             pictureBox4.Hide();
             dateLabel.Hide();
 
-            ReloadUserPic();
             
+            ReloadUserPic();
+            pictureBox10.Hide();
+            label1.Hide();
             this.dateLabel.Text = today.Day.ToString();
 
             TodayWetherCrawler todayWetherCrawler = new TodayWetherCrawler();
@@ -54,11 +56,13 @@ namespace iToday
                 pictureBox9.ImageLocation = "../../Resource/user_yes.png";
                 pictureBox10.Show();
                 label1.Text = Glo.user.Id;
+                label1.Show();
             }
             else
             {
                 pictureBox9.ImageLocation = "../../Resource/user_no.png";
                 pictureBox10.Hide();
+                label1.Hide();
             }
         }
   
@@ -89,11 +93,14 @@ namespace iToday
                 panel1.Show();
                 showInfor = false;
                 pictureBox4.ImageLocation = "../../Resource//remove.png";
+                ReloadUserPic();
             }
             else
             {
                 panel1.Hide();
                 flowLayoutPanel1.Hide();
+                pictureBox10.Hide();
+                label1.Hide();
                 showInfor = true;
                 pictureBox4.ImageLocation = "../../Resource//add.png";
             }
@@ -117,6 +124,13 @@ namespace iToday
             {
                 flowLayoutPanel1.Controls.Add(thingPanel);
             }
+            if (hotThingPanels.Count == 0)
+            {
+                PictureBox picture = new PictureBox();
+                picture.ImageLocation = "../../Resource/net.png";
+                picture.SizeMode = PictureBoxSizeMode.StretchImage;
+                this.flowLayoutPanel1.Controls.Add(picture);
+            }
             flowLayoutPanel1.Show();
         }
 
@@ -137,6 +151,13 @@ namespace iToday
             {
                 this.flowLayoutPanel1.Controls.Add(thingPanel);
             }
+            if(historyThingPanels.Count==0)
+            {
+                PictureBox picture = new PictureBox();
+                picture.ImageLocation = "../../Resource/net.png";
+                picture.SizeMode = PictureBoxSizeMode.StretchImage;
+                this.flowLayoutPanel1.Controls.Add(picture);
+            }
             flowLayoutPanel1.Show();
         }
 
@@ -152,6 +173,7 @@ namespace iToday
                 
             }
             flowLayoutPanel1.Controls.Add(todayDatePanel);
+           
             flowLayoutPanel1.Show();
         }
 
@@ -226,9 +248,27 @@ namespace iToday
                     todayClassPanels.Add(new TodayClassPanel(todayClass));
                 }
             }
+            else if(Glo.user == null)
+            {
+                Label label = new Label();
+                label.Text = "您还未登录^o^!";
+                label.Width = 180;
+                label.TextAlign = ContentAlignment.MiddleCenter;
+                label.Font = new Font("楷体", 12, FontStyle.Bold);
+                flowLayoutPanel1.Controls.Add(label);
+            }
             foreach (TodayClassPanel todayClassPanel in todayClassPanels)
             {
                 flowLayoutPanel1.Controls.Add(todayClassPanel);
+            }
+            if(todayClassPanels.Count == 0 && Glo.user != null)
+            {
+                Label label = new Label();
+                label.Text = "今天没课^o^!";
+                label.Width = 180;
+                label.TextAlign = ContentAlignment.MiddleCenter;
+                label.Font = new Font("楷体", 12, FontStyle.Bold);
+                flowLayoutPanel1.Controls.Add(label);
             }
             flowLayoutPanel1.Show();
         }
@@ -241,11 +281,7 @@ namespace iToday
                 {
                     TodayClassCrawler todayClassCrawler = new TodayClassCrawler();
                     Login login = new Login(todayClassCrawler);
-                    login.ShowDialog();
-                    foreach (MyClass todayClass in todayClassCrawler.list)
-                    {
-                        todayClassPanels.Add(new TodayClassPanel(todayClass));
-                    }
+                    login.ShowDialog();                 
                 }
             }
             catch(Exception e2)

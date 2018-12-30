@@ -1,0 +1,11 @@
+D:\WORKSPACES\C#\Weather\Weather\bin\Debug\Weather.exe.config
+D:\WORKSPACES\C#\Weather\Weather\bin\Debug\Weather.exe
+D:\WORKSPACES\C#\Weather\Weather\bin\Debug\Weather.pdb
+D:\WORKSPACES\C#\Weather\Weather\bin\Debug\Newtonsoft.Json.dll
+D:\WORKSPACES\C#\Weather\Weather\bin\Debug\Newtonsoft.Json.pdb
+D:\WORKSPACES\C#\Weather\Weather\bin\Debug\Newtonsoft.Json.xml
+D:\WORKSPACES\C#\Weather\Weather\obj\Debug\Weather.csprojAssemblyReference.cache
+D:\WORKSPACES\C#\Weather\Weather\obj\Debug\Weather.csproj.CoreCompileInputs.cache
+D:\WORKSPACES\C#\Weather\Weather\obj\Debug\Weather.csproj.CopyComplete
+D:\WORKSPACES\C#\Weather\Weather\obj\Debug\Weather.exe
+D:\WORKSPACES\C#\Weather\Weather\obj\Debug\Weather.pdb
